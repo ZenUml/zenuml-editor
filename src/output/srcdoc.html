@@ -262,21 +262,25 @@
 	<body>
   <div id="app" />
   <script>
-    Vue.use(Vuex);
-    const VueSequence = window['vue-sequence'].VueSequence;
-    const store = new Vuex.Store(VueSequence.Store());
-    store.dispatch('updateCode',{ code: `
+    (() => {
+      Vue.use(Vuex);
+      const VueSequence = window['vue-sequence'].VueSequence;
+      const store = new Vuex.Store(VueSequence.Store());
+      store.state.code = `
   @EC2 BookService
   @DynamoDB BookRepository
   BookService.saveBook(1) {
     BookRepository.storeBook()
   }
-  `});
-    new Vue({
-      el: '#app',
-      store,
-      render: h => h(VueSequence.DiagramFrame)
-    });
+  `
+      new Vue({
+        el: '#app',
+        store,
+        render: h => h(VueSequence.DiagramFrame)
+      });
+      window.store = store;
+
+    })()
   </script>
   </body>
 </html>
