@@ -1,6 +1,5 @@
-import { version, reactive, watchEffect } from 'vue'
+import { version, reactive } from 'vue'
 import * as defaultCompiler from 'vue/compiler-sfc'
-import { compileFile } from './transform'
 import { utoa, atou } from './utils'
 import {
   SFCScriptCompileOptions,
@@ -135,16 +134,7 @@ export class ReplStore implements Store {
     this.initImportMap()
   }
 
-  // don't start compiling until the options are set
-  init() {
-    // Runs a function immediately while reactively tracking its dependencies and re-runs it whenever the dependencies are changed.
-    watchEffect(() => compileFile(this, this.state.activeFile))
-    for (const file in this.state.files) {
-      if (file !== defaultMainFile) {
-        compileFile(this, this.state.files[file])
-      }
-    }
-  }
+  init() { }
 
   setActive(filename: string) {
     this.state.activeFile = this.state.files[filename]
@@ -179,25 +169,6 @@ export class ReplStore implements Store {
     }
     return exported
   }
-
-  async setFiles(newFiles: Record<string, string>, mainFile = defaultMainFile) {
-    const files: Record<string, File> = {}
-    if (mainFile === defaultMainFile && !newFiles[mainFile]) {
-      files[mainFile] = new File(mainFile, welcomeCode)
-    }
-    for (const filename in newFiles) {
-      files[filename] = new File(filename, newFiles[filename])
-    }
-    for (const file in files) {
-      await compileFile(this, files[file])
-    }
-    this.state.mainFile = mainFile
-    this.state.files = files
-    this.initImportMap()
-    this.setActive(mainFile)
-    this.forceSandboxReset()
-  }
-
   private forceSandboxReset() {
     this.state.resetFlip = !this.state.resetFlip
   }
@@ -267,19 +238,5 @@ export class ReplStore implements Store {
     this.setImportMap(importMap)
     this.forceSandboxReset()
     console.info(`[@vue/repl] Now using Vue version: ${version}`)
-  }
-
-  resetVueVersion() {
-    this.vueVersion = undefined
-    this.compiler = defaultCompiler
-    this.state.vueRuntimeURL = this.defaultVueRuntimeURL
-    this.state.vueServerRendererURL = this.defaultVueServerRendererURL
-    const importMap = this.getImportMap()
-    const imports = importMap.imports || (importMap.imports = {})
-    imports.vue = this.defaultVueRuntimeURL
-    imports['vue/server-renderer'] = this.defaultVueServerRendererURL
-    this.setImportMap(importMap)
-    this.forceSandboxReset()
-    console.info(`[@vue/repl] Now using default Vue version`)
   }
 }
