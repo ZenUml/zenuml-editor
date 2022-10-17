@@ -49,23 +49,25 @@
 
 							let { script: scripts } = ev.data.args
 							if (typeof scripts === 'string') scripts = [scripts]
-
-							for (const script of scripts) {
-								const scriptEl = document.createElement('script')
-								scriptEl.setAttribute('type', 'module')
-								// send ok in the module script to ensure sequential evaluation
-								// of multiple proxy.eval() calls
-								const done = new Promise((resolve) => {
-									window.__next__ = resolve
-								})
-								scriptEl.innerHTML = script + `\nwindow.__next__()`
-								document.head.appendChild(scriptEl)
-								scriptEl.onerror = err => send_error(err.message, err.stack)
-								scriptEls.push(scriptEl)
-								await done
-							}
+              console.log('scripts: $$$$$$', scripts);
+              store.state.code = scripts[0]
+							// for (const script of scripts) {
+							// 	const scriptEl = document.createElement('script')
+							// 	scriptEl.setAttribute('type', 'module')
+							// 	// send ok in the module script to ensure sequential evaluation
+							// 	// of multiple proxy.eval() calls
+							// 	const done = new Promise((resolve) => {
+							// 		window.__next__ = resolve
+							// 	})
+							// 	scriptEl.innerHTML = script + `\nwindow.__next__()`
+							// 	document.head.appendChild(scriptEl)
+							// 	scriptEl.onerror = err => send_error(err.message, err.stack)
+							// 	scriptEls.push(scriptEl)
+							// 	await done
+							// }
 							send_ok()
 						} catch (e) {
+              console.log('$$$$$$', e);
 							send_error(e.message, e.stack);
 						}
 					}
@@ -173,7 +175,7 @@
 					const original = console[group_action.method];
 					console[group_action.method] = (label) => {
 						parent.postMessage({ action: group_action.action, label }, '*');
-
+            console.log('group_action', group_action);
 						original(label);
 					};
 				});

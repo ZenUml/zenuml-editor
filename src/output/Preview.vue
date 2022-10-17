@@ -174,6 +174,7 @@ async function updatePreview() {
 
   try {
     const mainFile = store.state.mainFile
+    const { code } = store.state.activeFile
 
     // if SSR, generate the SSR bundle and eval it to render the HTML
     if (isSSR && mainFile.endsWith('.vue')) {
@@ -181,23 +182,7 @@ async function updatePreview() {
       console.log(
         `[@vue/repl] successfully compiled ${ssrModules.length} modules for SSR.`
       )
-      await proxy.eval([
-        `const __modules__ = {};`,
-        ...ssrModules,
-        `import { renderToString as _renderToString } from 'vue/server-renderer'
-         import { createSSRApp as _createApp } from 'vue'
-         const AppComponent = __modules__["${mainFile}"].default
-         AppComponent.name = 'Repl'
-         const app = _createApp(AppComponent)
-         app.config.unwrapInjectedRef = true
-         app.config.warnHandler = () => {}
-         window.__ssr_promise__ = _renderToString(app).then(html => {
-           document.body.innerHTML = '<div id="app">' + html + '</div>'
-         }).catch(err => {
-           console.error("SSR Error", err)
-         })
-        `
-      ])
+      await proxy.eval([ code ])
     }
 
     // compile code to simulated module system
@@ -239,7 +224,8 @@ async function updatePreview() {
     }
 
     // eval code in sandbox
-    await proxy.eval(codeToEval)
+    console.log(`[@vue/repl] evaluating code in sandbox...`, code)
+    await proxy.eval(code)
   } catch (e: any) {
     runtimeError.value = (e as Error).message
   }

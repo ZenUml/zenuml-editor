@@ -137,6 +137,7 @@ export class ReplStore implements Store {
 
   // don't start compiling until the options are set
   init() {
+    // Runs a function immediately while reactively tracking its dependencies and re-runs it whenever the dependencies are changed.
     watchEffect(() => compileFile(this, this.state.activeFile))
     for (const file in this.state.files) {
       if (file !== defaultMainFile) {
