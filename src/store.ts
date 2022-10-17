@@ -90,8 +90,6 @@ export class ReplStore implements Store {
 
   private defaultVueRuntimeURL: string
   private defaultVueServerRendererURL: string
-  private pendingCompiler: Promise<any> | null = null
-
   constructor({
     serializedState = '',
     defaultVueRuntimeURL = `https://unpkg.com/@vue/runtime-dom@${version}/dist/runtime-dom.esm-browser.js`,
@@ -169,10 +167,6 @@ export class ReplStore implements Store {
     }
     return exported
   }
-  private forceSandboxReset() {
-    this.state.resetFlip = !this.state.resetFlip
-  }
-
   private initImportMap() {
     const map = this.state.files['import-map.json']
     if (!map) {
@@ -214,29 +208,4 @@ export class ReplStore implements Store {
     }
   }
 
-  setImportMap(map: {
-    imports: Record<string, string>
-    scopes?: Record<string, Record<string, string>>
-  }) {
-    this.state.files['import-map.json']!.code = JSON.stringify(map, null, 2)
-  }
-
-  async setVueVersion(version: string) {
-    this.vueVersion = version
-    const compilerUrl = `https://unpkg.com/@vue/compiler-sfc@${version}/dist/compiler-sfc.esm-browser.js`
-    const runtimeUrl = `https://unpkg.com/@vue/runtime-dom@${version}/dist/runtime-dom.esm-browser.js`
-    const ssrUrl = `https://unpkg.com/@vue/server-renderer@${version}/dist/server-renderer.esm-browser.js`
-    this.pendingCompiler = import(/* @vite-ignore */ compilerUrl)
-    this.compiler = await this.pendingCompiler
-    this.pendingCompiler = null
-    this.state.vueRuntimeURL = runtimeUrl
-    this.state.vueServerRendererURL = ssrUrl
-    const importMap = this.getImportMap()
-    const imports = importMap.imports || (importMap.imports = {})
-    imports.vue = runtimeUrl
-    imports['vue/server-renderer'] = ssrUrl
-    this.setImportMap(importMap)
-    this.forceSandboxReset()
-    console.info(`[@vue/repl] Now using Vue version: ${version}`)
-  }
 }
