@@ -14,23 +14,6 @@
 		<style id="__sfc-styles"></style>
 		<script>
 			(() => {
-				let scriptEls = []
-
-				window.process = { env: {} }
-				window.__modules__ = {}
-
-				window.__export__ = (mod, key, get) => {
-					Object.defineProperty(mod, key, {
-						enumerable: true,
-						configurable: true,
-						get
-					})
-				}
-
-				window.__dynamic_import__ = key => {
-					return Promise.resolve(window.__modules__[key])
-				}
-
 				async function handle_message(ev) {
 					let { action, cmd_id } = ev.data;
 					const send_message = (payload) => parent.postMessage( { ...payload }, ev.origin);
@@ -40,34 +23,13 @@
 
 					if (action === 'eval') {
 						try {
-							if (scriptEls.length) {
-								scriptEls.forEach(el => {
-									document.head.removeChild(el)
-								})
-								scriptEls.length = 0
-							}
 
 							let { script: scripts } = ev.data.args
 							if (typeof scripts === 'string') scripts = [scripts]
               console.log('scripts: $$$$$$', scripts);
               store.state.code = scripts[0]
-							// for (const script of scripts) {
-							// 	const scriptEl = document.createElement('script')
-							// 	scriptEl.setAttribute('type', 'module')
-							// 	// send ok in the module script to ensure sequential evaluation
-							// 	// of multiple proxy.eval() calls
-							// 	const done = new Promise((resolve) => {
-							// 		window.__next__ = resolve
-							// 	})
-							// 	scriptEl.innerHTML = script + `\nwindow.__next__()`
-							// 	document.head.appendChild(scriptEl)
-							// 	scriptEl.onerror = err => send_error(err.message, err.stack)
-							// 	scriptEls.push(scriptEl)
-							// 	await done
-							// }
 							send_ok()
 						} catch (e) {
-              console.log('$$$$$$', e);
 							send_error(e.message, e.stack);
 						}
 					}
@@ -255,9 +217,6 @@
 			})()
 		</script>
 
-		<!-- ES Module Shims: Import maps polyfill for modules browsers without import maps support (all except Chrome 89+) -->
-		<script async src="https://unpkg.com/es-module-shims@1.5.18/dist/es-module-shims.wasm.js"></script>
-		<script type="importmap"><!--IMPORT_MAP--></script>
 	</head>
 	<body>
   <div id="app" />
