@@ -12,7 +12,4 @@ image::images/init-and-post-messages.png[width=400]
 
 TODO
 
-== How to configure the Editor
-
-TODO
 
