@@ -56,7 +56,8 @@ onUnmounted(() => {
   stopUpdateWatcher && stopUpdateWatcher()
 })
 
-function createSandbox() {
+function createSandbox()
+{
   if (sandbox) {
     // clear prev sandbox
     proxy.destroy()
@@ -66,16 +67,16 @@ function createSandbox() {
 
   sandbox = document.createElement('iframe')
   sandbox.setAttribute(
-    'sandbox',
-    [
-      'allow-forms',
-      'allow-modals',
-      'allow-pointer-lock',
-      'allow-popups',
-      'allow-same-origin',
-      'allow-scripts',
-      'allow-top-navigation-by-user-activation'
-    ].join(' ')
+      'sandbox',
+      [
+        'allow-forms',
+        'allow-modals',
+        'allow-pointer-lock',
+        'allow-popups',
+        'allow-same-origin',
+        'allow-scripts',
+        'allow-top-navigation-by-user-activation'
+      ].join(' ')
   )
 
   const importMap = store.getImportMap()
@@ -85,11 +86,11 @@ function createSandbox() {
   if (!importMap.imports.vue) {
     importMap.imports.vue = store.state.vueRuntimeURL
   }
-  const sandboxSrc = srcdoc.replace(
-    /<!--IMPORT_MAP-->/,
-    JSON.stringify(importMap)
-  )
-  sandbox.srcdoc = sandboxSrc
+  srcdoc.replace(
+      /<!--IMPORT_MAP-->/,
+      JSON.stringify(importMap)
+  );
+  sandbox.src = "https://embed.zenuml.com/embed.html"
   container.value.appendChild(sandbox)
 
   proxy = new PreviewProxy(sandbox, {
@@ -98,14 +99,14 @@ function createSandbox() {
     },
     on_error: (event: any) => {
       const msg =
-        event.value instanceof Error ? event.value.message : event.value
+          event.value instanceof Error ? event.value.message : event.value
       if (
-        msg.includes('Failed to resolve module specifier') ||
-        msg.includes('Error resolving module specifier')
+          msg.includes('Failed to resolve module specifier') ||
+          msg.includes('Error resolving module specifier')
       ) {
         runtimeError.value =
-          msg.replace(/\. Relative references must.*$/, '') +
-          `.\nTip: edit the "Import Map" tab to specify import paths for dependencies.`
+            msg.replace(/\. Relative references must.*$/, '') +
+            `.\nTip: edit the "Import Map" tab to specify import paths for dependencies.`
       } else {
         runtimeError.value = event.value
       }
@@ -130,9 +131,9 @@ function createSandbox() {
       } else if (log.level === 'warn') {
         if (log.args[0].toString().includes('[Vue warn]')) {
           runtimeWarning.value = log.args
-            .join('')
-            .replace(/\[Vue warn\]:/, '')
-            .trim()
+              .join('')
+              .replace(/\[Vue warn\]:/, '')
+              .trim()
         }
       }
     },
@@ -152,6 +153,7 @@ function createSandbox() {
     stopUpdateWatcher = watchEffect(updatePreview)
   })
 }
+
 
 async function updatePreview() {
   if (import.meta.env.PROD && clearConsole.value) {
