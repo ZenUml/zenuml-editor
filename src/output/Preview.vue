@@ -89,7 +89,8 @@ function createSandbox() {
     /<!--IMPORT_MAP-->/,
     JSON.stringify(importMap)
   )
-  sandbox.srcdoc = sandboxSrc
+  // sandbox.srcdoc = sandboxSrc
+  sandbox.src = "https://air.zenuml.com/embed.html"
   container.value.appendChild(sandbox)
 
   proxy = new PreviewProxy(sandbox, {
@@ -182,7 +183,7 @@ async function updatePreview() {
       console.log(
         `[@vue/repl] successfully compiled ${ssrModules.length} modules for SSR.`
       )
-      await proxy.eval([ code ])
+      await proxy.eval(code)
     }
 
     // compile code to simulated module system
