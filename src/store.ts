@@ -1,6 +1,6 @@
 import { version, reactive } from 'vue'
 import * as defaultCompiler from 'vue/compiler-sfc'
-import { utoa, atou } from './utils'
+import { utoa, atou, defaultDiagramName } from './utils'
 import {
   SFCScriptCompileOptions,
   SFCAsyncStyleCompileOptions,
@@ -8,19 +8,33 @@ import {
 } from 'vue/compiler-sfc'
 import { OutputModes } from './output/types'
 
-const defaultMainFile = 'App.vue'
+const defaultMainFile = defaultDiagramName()
 
 const welcomeCode = `
-<script setup>
-import { ref } from 'vue'
+// An example for a RESTful endpoint<br>
+// Go to the "Cheat sheet" tab or https://docs.zenuml.com
+// to find all syntax<br>
+// \`POST /v1/book/{id}/borrow\`
+BookLibService.Borrow(id) {
+  User = Session.GetUser()
+  if(User.isActive) {
+    try {
+      BookRepository.Update(id, onLoan, User)
+      receipt = new Receipt(id, dueDate)
+    } catch (BookNotFoundException) {
+      ErrorService.onException(BookNotFoundException)
+    } finally {
+      Connection.close()
+    }
+  }
+  return receipt
+}
 
-const msg = ref('Hello World!')
-</script>
-
-<template>
-  <h1>{{ msg }}</h1>
-  <input v-model="msg">
-</template>
+result = A.message {
+}
+a = new A()
+//Note
+A.message()
 `.trim()
 
 export class File {
@@ -168,44 +182,44 @@ export class ReplStore implements Store {
     return exported
   }
   private initImportMap() {
-    const map = this.state.files['import-map.json']
-    if (!map) {
-      this.state.files['import-map.json'] = new File(
-        'import-map.json',
-        JSON.stringify(
-          {
-            imports: {
-              vue: this.defaultVueRuntimeURL
-            }
-          },
-          null,
-          2
-        )
-      )
-    } else {
-      try {
-        const json = JSON.parse(map.code)
-        if (!json.imports.vue) {
-          json.imports.vue = this.defaultVueRuntimeURL
-          map.code = JSON.stringify(json, null, 2)
-        }
-        if (!json.imports['vue/server-renderer']) {
-          json.imports['vue/server-renderer'] = this.defaultVueServerRendererURL
-          map.code = JSON.stringify(json, null, 2)
-        }
-      } catch (e) {}
-    }
+    // const map = this.state.files['import-map.json']
+    // if (!map) {
+    //   this.state.files['import-map.json'] = new File(
+    //     'import-map.json',
+    //     JSON.stringify(
+    //       {
+    //         imports: {
+    //           vue: this.defaultVueRuntimeURL
+    //         }
+    //       },
+    //       null,
+    //       2
+    //     )
+    //   )
+    // } else {
+    //   try {
+    //     const json = JSON.parse(map.code)
+    //     if (!json.imports.vue) {
+    //       json.imports.vue = this.defaultVueRuntimeURL
+    //       map.code = JSON.stringify(json, null, 2)
+    //     }
+    //     if (!json.imports['vue/server-renderer']) {
+    //       json.imports['vue/server-renderer'] = this.defaultVueServerRendererURL
+    //       map.code = JSON.stringify(json, null, 2)
+    //     }
+    //   } catch (e) {}
+    // }
   }
 
   getImportMap() {
-    try {
-      return JSON.parse(this.state.files['import-map.json'].code)
-    } catch (e) {
-      this.state.errors = [
-        `Syntax error in import-map.json: ${(e as Error).message}`
-      ]
-      return {}
-    }
+  //   try {
+  //     return JSON.parse(this.state.files['import-map.json'].code)
+  //   } catch (e) {
+  //     this.state.errors = [
+  //       `Syntax error in import-map.json: ${(e as Error).message}`
+  //     ]
+  //     return {}
+  //   }
   }
 
 }

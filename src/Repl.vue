@@ -5,7 +5,7 @@ import Output from './output/Output.vue'
 import { Store, ReplStore, SFCOptions } from './store'
 import { provide, toRef } from 'vue'
 
-export interface Props {
+interface Props {
   store?: Store
   autoResize?: boolean
   showCompileOutput?: boolean
@@ -19,9 +19,9 @@ export interface Props {
 const props = withDefaults(defineProps<Props>(), {
   store: () => new ReplStore(),
   autoResize: true,
-  showCompileOutput: true,
-  showImportMap: true,
-  clearConsole: true,
+  showCompileOutput: false,
+  showImportMap: false,
+  clearConsole: false,
   ssr: false
 })
 
