@@ -31,7 +31,7 @@ const activeMode = computed(() => {
 
 <style scoped>
 .editor-container {
-  height: calc(100% - var(--header-height));
+  height: calc(100% - var(--header-height) - var(--toolbox-height));
   overflow: hidden;
   position: relative;
 }
