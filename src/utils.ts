@@ -1,4 +1,11 @@
-import { zlibSync, unzlibSync, strToU8, strFromU8 } from 'fflate'
+import {zlibSync, unzlibSync, strToU8, strFromU8} from 'fflate'
+
+/**
+ * the function from our laravel project.
+ */
+export function defaultDiagramName() {
+  return `Untitled at ${new Date().toISOString()}`;
+}
 
 export function debounce(fn: Function, n = 100) {
   let handle: any
@@ -12,7 +19,7 @@ export function debounce(fn: Function, n = 100) {
 
 export function utoa(data: string): string {
   const buffer = strToU8(data)
-  const zipped = zlibSync(buffer, { level: 9 })
+  const zipped = zlibSync(buffer, {level: 9})
   const binary = strFromU8(zipped, true)
   return btoa(binary)
 }

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { Store } from '../store'
-import { computed, inject, ref, VNode, Ref } from 'vue'
+import {Store} from '../store'
+import {computed, inject, ref, Ref, VNode} from 'vue'
+import {defaultDiagramName} from "../utils";
 
 const store = inject('store') as Store
 
@@ -16,23 +17,22 @@ const files = computed(() =>
 
 function startAddFile() {
   let i = 0
-  let name = `Comp.vue`
+  // let name = `Comp.vue`
+  // while (true) {
+  //   let hasConflict = false
+  //   for (const file in store.state.files) {
+  //     if (file === name) {
+  //       hasConflict = true
+  //       name = `Comp${++i}.vue`
+  //       break
+  //     }
+  //   }
+  //   if (!hasConflict) {
+  //     break
+  //   }
+  // }
 
-  while (true) {
-    let hasConflict = false
-    for (const file in store.state.files) {
-      if (file === name) {
-        hasConflict = true
-        name = `Comp${++i}.vue`
-        break
-      }
-    }
-    if (!hasConflict) {
-      break
-    }
-  }
-
-  pendingFilename.value = name
+  pendingFilename.value = defaultDiagramName()
   pending.value = true
 }
 
@@ -48,12 +48,12 @@ function doneAddFile() {
   if (!pending.value) return
   const filename = pendingFilename.value
 
-  if (!/\.(vue|js|ts|css)$/.test(filename)) {
-    store.state.errors = [
-      `Playground only supports *.vue, *.js, *.ts, *.css files.`
-    ]
-    return
-  }
+  // if (!/\.(vue|js|ts|css)$/.test(filename)) {
+  //   store.state.errors = [
+  //     `Playground only supports *.vue, *.js, *.ts, *.css files.`
+  //   ]
+  //   return
+  // }
 
   if (filename in store.state.files) {
     store.state.errors = [`File "${filename}" already exists.`]
@@ -111,7 +111,7 @@ function horizontalScroll(e: WheelEvent) {
         @vnodeMounted="focus"
       />
     </div>
-    <button class="add" @click="startAddFile">+</button>
+<!--    <button class="add" @click="startAddFile">+</button>-->
 
     <div v-if="showImportMap" class="import-map-wrapper">
       <div
