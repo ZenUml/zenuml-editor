@@ -60,6 +60,7 @@ provide('clear-console', toRef(props, 'clearConsole'))
   --color-branding: #42b883;
   --color-branding-dark: #416f9c;
   --header-height: 38px;
+  --toolbox-height: 28px;
 
   font-size: 13px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
