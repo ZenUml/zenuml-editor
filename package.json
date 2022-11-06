@@ -1,7 +1,7 @@
 {
-  "name": "@vue/repl",
+  "name": "@zenuml/editor",
   "version": "1.3.2",
-  "description": "Vue component for editing Vue components",
+  "description": "Editor and playground for ZenUML",
   "main": "dist/ssr-stub.js",
   "module": "dist/vue-repl.js",
   "files": [
@@ -25,14 +25,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vuejs/repl.git"
+    "url": "git+https://github.com/ZenUml/zenuml-editor.git"
   },
-  "author": "Evan You",
+  "author": "MrCoder",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vuejs/repl/issues"
+    "url": "https://github.com/ZenUml/zenuml-editor/issues"
   },
-  "homepage": "https://github.com/vuejs/repl#readme",
+  "homepage": "https://github.com/ZenUml/zenuml-editor#readme",
   "devDependencies": {
     "@babel/types": "^7.15.6",
     "@microsoft/api-extractor": "^7.19.2",
