@@ -51,5 +51,8 @@
   },
   "peerDependencies": {
     "vue": "^3.2.13"
+  },
+  "dependencies": {
+    "vue3-tabs-component": "^1.1.1"
   }
 }
