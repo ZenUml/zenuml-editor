@@ -5,17 +5,74 @@ import Message from '../Message.vue'
 import {debounce} from '../utils'
 import {computed, defineComponent, inject, reactive, toRefs} from 'vue'
 import {Store} from '../store'
-import {Tabs, Tab} from 'vue3-tabs-component';
+import {Tabs, Tab} from 'vue3-tabs-component'
 
 const store = inject('store') as Store
 
+/**
+ * Here we save a switch for auto report user code to the parent window.
+ */
+let autoReport = false
+
 const onChange = debounce((code: string) => {
   store.state.activeFile.code = code
+  if (autoReport) {
+    // if autoReport is true, we report the code to the parent window as `get` method
+    sendBack(window.top, 'get', store.state.activeFile.code)
+  }
 }, 250)
 
 const activeMode = computed(() => {
   return 'javascript'
 })
+
+/**
+ * Here we use `sendBack` to send message to the parent window. It will check if the parent window exists.
+ * @param target the target window, should be parent window.
+ * @param method the method name, should be `get` or `replace` or `autoReport`
+ * @param content the content to send
+ */
+function sendBack(target:Window | null, method:string, content:string) {
+  if (!target) return
+  if (target === window) return
+  target.postMessage({method, result: content}, '*')
+}
+
+/**
+ * This is the message handler for the parent window. It will handle the message from the parent window.
+ * @param ev event
+ */
+async function handle_message(ev: any) {
+  const sourceWindow = ev.source
+  const message = ev.data
+  if (message.method === 'replace') {
+    if (message.hasOwnProperty('code')) {
+      store.state.activeFile.code = message.code
+      sendBack(sourceWindow, message.method, 'ok')
+    } else {
+      sendBack(sourceWindow, message.method, 'error: missing field: code')
+    }
+  }
+
+  if (message.method === 'get') {
+    sendBack(sourceWindow, message.method, store.state.activeFile.code)
+  }
+
+  if (message.method === 'autoReport') {
+    if (message.hasOwnProperty('enabled')) {
+      autoReport = Boolean(message.enabled)
+      sendBack(sourceWindow, message.method, 'ok')
+    } else {
+      sendBack(sourceWindow, message.method, 'error: missing field: value')
+    }
+  }
+}
+
+/**
+ * add a event listener for the message event from parent window
+ */
+window.addEventListener('message', handle_message, false);
+
 </script>
 
 <template>

@@ -15,27 +15,6 @@ const files = computed(() =>
         .map(([name]) => name)
 )
 
-function startAddFile() {
-  // let i = 0
-  // let name = `Comp.vue`
-  // while (true) {
-  //   let hasConflict = false
-  //   for (const file in store.state.files) {
-  //     if (file === name) {
-  //       hasConflict = true
-  //       name = `Comp${++i}.vue`
-  //       break
-  //     }
-  //   }
-  //   if (!hasConflict) {
-  //     break
-  //   }
-  // }
-
-  pendingFilename.value = defaultDiagramName()
-  pending.value = true
-}
-
 function cancelAddFile() {
   pending.value = false
 }
@@ -47,13 +26,6 @@ function focus({el}: VNode) {
 function doneAddFile() {
   if (!pending.value) return
   const filename = pendingFilename.value
-
-  // if (!/\.(vue|js|ts|css)$/.test(filename)) {
-  //   store.state.errors = [
-  //     `Playground only supports *.vue, *.js, *.ts, *.css files.`
-  //   ]
-  //   return
-  // }
 
   if (filename in store.state.files) {
     store.state.errors = [`File "${filename}" already exists.`]

@@ -1,61 +1,65 @@
-# @vue/repl
+The code editor for Zenuml
+---
 
-Vue SFC REPL as a Vue 3 component.
+# How to use
+## As an iFrame
+You can embed this editor in an iFrame then postMessage to it to load a diagram.
 
-## Simple Usage
-
-```vue
-<script setup>
-import { Repl } from '@vue/repl'
-import '@vue/repl/style.css'
-</script>
-
-<template>
-  <Repl />
-</template>
+```html
+<iframe src="https://xxx" width="100%" height="100%"></iframe>
 ```
 
-## Advanced Usage
+```javascript
+const iframe = document.querySelector('iframe');
+iframe.addEventListener('load', () => {
+  iframe.contentWindow.postMessage({
+    method: 'replace',
+    code: 'ZEN:...'
+  }, '*');
+});
+```
 
-```vue
-<script setup>
-import { watchEffect } from 'vue'
-import { Repl, ReplStore } from '@vue/repl'
+## Available methods
+- `replace` - Replace the current diagram with the given code
+- `get` - Get the current diagram code
+- `autoReport` - Enable or disable auto reporting
 
-// retrieve some configuration options from the URL
-const query = new URLSearchParams(location.search)
+The editor starts wth a default diagram code snippet. You can replace it with your own code by sending a `replace` message to the editor.
 
-const store = new ReplStore({
-  // initialize repl with previously serialized state
-  serializedState: location.hash.slice(1),
+```javascript
+iframe.contentWindow.postMessage({
+  method: 'replace',
+  code: 'ZEN:...'
+}, '*');
+```
 
-  // starts on the output pane (mobile only) if the URL has a showOutput query
-  showOutput: query.has('showOutput'),
-  // starts on a different tab on the output pane if the URL has a outputMode query
-  // and default to the "preview" tab
-  outputMode: (query.get('outputMode') || 'preview'),
+You can also get the current diagram code by sending a `get` message to the editor.
 
-  // specify the default URL to import Vue runtime from in the sandbox
-  // default is the CDN link from unpkg.com with version matching Vue's version
-  // from peerDependency
-  defaultVueRuntimeURL: 'cdn link to vue.runtime.esm-browser.js'
-})
-
-// persist state to URL hash
-watchEffect(() => history.replaceState({}, '', store.serialize()))
-
-// pre-set import map
-store.setImportMap({
-  imports: {
-    myLib: 'cdn link to esm build of myLib'
+```javascript
+window.addEventListener('message', (event) => {
+  if (event.data.method === 'get') {
+    console.log(event.data.result);
   }
-})
+});
 
-// use a specific version of Vue
-store.setVueVersion('3.2.8')
-</script>
+iframe.contentWindow.postMessage({
+  method: 'get'
+}, '*');
+```
 
-<template>
-  <Repl :store="store" :showCompileOutput="true" />
-</template>
+You can enable or disable auto reporting by sending an `autoReport` message to the editor. Default is `false`, once enabled, the editor will automatically report the current diagram code to the parent window with a `autoReport` method.
+
+```javascript
+window.addEventListener('message', (event) => {
+  if (event.data.method === 'autoReport') {
+    console.log(event.data.result); // ok
+  }
+  if (event.data.method === 'get') {
+    console.log(event.data.result); // codes whenever user changed
+  }
+});
+iframe.contentWindow.postMessage({
+  method: 'autoReport',
+  enabled: true
+}, '*');
 ```
