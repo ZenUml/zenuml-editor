@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import FileSelector from './FileSelector.vue'
 import CodeMirror from '../codemirror/CodeMirror.vue'
 import Message from '../Message.vue'
 import {debounce} from '../utils'
-import {computed, defineComponent, inject, reactive, toRefs} from 'vue'
+import {computed, inject} from 'vue'
 import {Store} from '../store'
-import {Tabs, Tab} from 'vue3-tabs-component'
+import {Tabs, Tab} from 'vue3-tabs-component';
+import ToolBox from "./ToolBox.vue";
+import CheatSheet from "./CheatSheet.vue";
 
 const store = inject('store') as Store
 
@@ -82,7 +83,7 @@ window.addEventListener('message', handle_message, false);
           :cache-lifetime=0
     >
       <Tab name="ZenUML">
-        <FileSelector/>
+        <ToolBox />
         <div class="editor-container">
           <CodeMirror
               @change="onChange"
@@ -93,61 +94,18 @@ window.addEventListener('message', handle_message, false);
         </div>
       </Tab>
       <Tab name="Cheat sheet">
-        <div label="Cheat sheet">
-
-          <div
-              data-code-wrap-id="0"
-              id="htmlCodeEl"
-              data-type="html"
-              class="code-wrap"
-              onTransitionEnd={this.updateCodeWrapCollapseStates.bind(this)}
-          >
-            <div class="cheat-sheet">
-              <table>
-                <tr>
-                  <th>Feature</th>
-                  <th>Sample</th>
-                </tr>
-                <tr>
-                  <td>Participant</td>
-                  <td>ParticipantA<br/>ParticipantB</td>
-                </tr>
-                <tr>
-                  <td>Message</td>
-                  <td>A.messageA()</td>
-                </tr>
-                <tr>
-                  <td>Asyc message</td>
-                  <td>Alice-&gt;Bob: How are you?</td>
-                </tr>
-                <tr>
-                  <td>Nested message</td>
-                  <td>A.messageA() {'{'}<br/>&nbsp;&nbsp;B.messageB()<br/>{'}'}</td>
-                </tr>
-                <tr>
-                  <td class="tg-0pky">Self-message</td>
-                  <td class="tg-0pky">internalMessage()</td>
-                </tr>
-                <tr>
-                  <td>Alt</td>
-                  <td>if (condition1) {'{'}<br/>&nbsp;&nbsp;A.methodA()<br/>{'}'} else if (condition2) {'{'}<br/>&nbsp;&nbsp;B.methodB()<br/>{'}'}
-                    else {'{'}<br/>&nbsp;&nbsp;C.methodC()<br/>{'}'}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Loop</td>
-                  <td>while (condition) {'{'}<br/>&nbsp;&nbsp;A.methodA()<br/>{'}'}</td>
-                </tr>
-              </table>
-            </div>
-          </div>
-        </div>
+        <CheatSheet />
       </Tab>
     </Tabs>
   </div>
 </template>
 
 <style>
+.tabs-component-panel {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
 .tabs-component-tabs {
   display: flex;
   place-items: center;
@@ -190,22 +148,4 @@ window.addEventListener('message', handle_message, false);
   position: relative;
 }
 
-.cheat-sheet table {
-  margin: auto;
-  width: 100%;
-}
-
-.cheat-sheet th {
-  background: #444857;
-}
-
-.cheat-sheet tr:nth-child(even) {
-  background-color: #2d303a;
-}
-
-.cheat-sheet tr > td,
-.cheat-sheet tr > th {
-  padding: 10px 5px;
-  color: #a6accd;
-}
 </style>
