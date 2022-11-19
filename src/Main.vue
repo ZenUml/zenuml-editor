@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import SplitPane from './SplitPane.vue'
 import Editor from './editor/Editor.vue'
-import Output from './output/Output.vue'
+import Preview from './output/Preview.vue'
 import { Store, ReplStore, SFCOptions } from './store'
 import { provide, toRef } from 'vue'
 
@@ -41,10 +41,7 @@ provide('clear-console', toRef(props, 'clearConsole'))
         <Editor />
       </template>
       <template #right>
-        <Output
-          :showCompileOutput="props.showCompileOutput"
-          :ssr="!!props.ssr"
-        />
+        <Preview />
       </template>
     </SplitPane>
   </div>

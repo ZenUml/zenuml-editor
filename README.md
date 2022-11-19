@@ -1,6 +1,6 @@
-# @vue/repl
+# ZenUML Editor
 
-Vue SFC REPL as a Vue 3 component.
+ZenUML Editor component.
 
 ## Simple Usage
 

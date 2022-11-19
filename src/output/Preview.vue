@@ -10,12 +10,8 @@ import {
   inject,
   Ref
 } from 'vue'
-import srcdoc from './srcdoc.html?raw'
 import { PreviewProxy } from './PreviewProxy'
-import { compileModulesForPreview } from './moduleCompiler'
 import { Store } from '../store'
-
-const props = defineProps<{ show: boolean; ssr: boolean }>()
 
 const store = inject('store') as Store
 const clearConsole = inject('clear-console') as Ref<boolean>
@@ -29,24 +25,6 @@ let stopUpdateWatcher: WatchStopHandle | undefined
 
 // create sandbox on mount
 onMounted(createSandbox)
-
-// reset sandbox when import map changes
-// watch(
-//   () => store.state.files['import-map.json'].code,
-//   (raw) => {
-//     try {
-//       const map = JSON.parse(raw)
-//       if (!map.imports) {
-//         store.state.errors = [`import-map.json is missing "imports" field.`]
-//         return
-//       }
-//       createSandbox()
-//     } catch (e: any) {
-//       store.state.errors = [e as Error]
-//       return
-//     }
-//   }
-// )
 
 // reset sandbox when version changes
 watch(() => store.state.resetFlip, createSandbox)
@@ -78,18 +56,6 @@ function createSandbox() {
     ].join(' ')
   )
 
-  // const importMap = store.getImportMap()
-  // if (!importMap.imports) {
-  //   importMap.imports = {}
-  // }
-  // if (!importMap.imports.vue) {
-  //   importMap.imports.vue = store.state.vueRuntimeURL
-  // }
-  // const sandboxSrc = srcdoc.replace(
-  //   /<!--IMPORT_MAP-->/,
-  //   JSON.stringify(importMap)
-  // )
-  // sandbox.srcdoc = sandboxSrc
 
   sandbox.src = "https://embed.zenuml.com/embed.html"
   container.value.appendChild(sandbox)
@@ -162,63 +128,18 @@ async function updatePreview() {
   runtimeError.value = null
   runtimeWarning.value = null
 
-  let isSSR = props.ssr
   if (store.vueVersion) {
     const [_, minor, patch] = store.vueVersion.split('.')
     if (parseInt(minor, 10) < 2 || parseInt(patch, 10) < 27) {
       alert(
         `The selected version of Vue (${store.vueVersion}) does not support in-browser SSR.` +
           ` Rendering in client mode instead.`
-      )
-      isSSR = false
-    }
+      )}
   }
 
   try {
     const mainFile = store.state.mainFile
     const { code } = store.state.activeFile
-
-    // if SSR, generate the SSR bundle and eval it to render the HTML
-    // if (isSSR && mainFile.endsWith('.vue')) {
-    //   const ssrModules = compileModulesForPreview(store, true)
-    //   console.log(
-    //     `[@vue/repl] successfully compiled ${ssrModules.length} modules for SSR.`
-    //   )
-    //   await proxy.eval(code)
-    // }
-
-    // compile code to simulated module system
-    // const modules = compileModulesForPreview(store)
-
-    // const codeToEval = [
-    //   `window.__modules__ = {}\nwindow.__css__ = ''\n` +
-    //     `if (window.__app__) window.__app__.unmount()\n` +
-    //     (isSSR ? `` : `document.body.innerHTML = '<div id="app"></div>'`),
-    //   ...modules,
-    //   `document.getElementById('__sfc-styles').innerHTML = window.__css__`
-    // ]
-
-    // if main file is a vue file, mount it.
-    // if (mainFile.endsWith('.vue')) {
-    //   codeToEval.push(
-    //     `import { ${
-    //       isSSR ? `createSSRApp` : `createApp`
-    //     } as _createApp } from "vue"
-    //     const _mount = () => {
-    //       const AppComponent = __modules__["${mainFile}"].default
-    //       AppComponent.name = 'Repl'
-    //       const app = window.__app__ = _createApp(AppComponent)
-    //       app.config.unwrapInjectedRef = true
-    //       app.config.errorHandler = e => console.error(e)
-    //       app.mount('#app')
-    //     }
-    //     if (window.__ssr_promise__) {
-    //       window.__ssr_promise__.then(_mount)
-    //     } else {
-    //       _mount()
-    //     }`
-    //   )
-    // }
 
     // eval code in sandbox
     // console.log(`[@vue/repl] evaluating code in sandbox...`, code)
@@ -231,7 +152,7 @@ async function updatePreview() {
 </script>
 
 <template>
-  <div class="iframe-container" v-show="show" ref="container"></div>
+  <div class="iframe-container" ref="container"></div>
   <Message :err="runtimeError" />
   <Message v-if="!runtimeError" :warn="runtimeWarning" />
 </template>
