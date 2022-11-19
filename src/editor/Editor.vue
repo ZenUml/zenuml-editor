@@ -44,6 +44,11 @@ const activeMode = computed(() => {
 </template>
 
 <style>
+.tabs-component-panel {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
 .tabs-component-tabs {
   display: flex;
   place-items: center;

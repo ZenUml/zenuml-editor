@@ -6,7 +6,6 @@ import {
   SFCAsyncStyleCompileOptions,
   SFCTemplateCompileOptions
 } from 'vue/compiler-sfc'
-import { OutputModes } from './output/types'
 
 const defaultMainFile = defaultDiagramName()
 
@@ -82,14 +81,11 @@ export interface Store {
   deleteFile: (filename: string) => void
   getImportMap: () => any
   initialShowOutput: boolean
-  initialOutputMode: OutputModes
 }
 
 export interface StoreOptions {
   serializedState?: string
   showOutput?: boolean
-  // loose type to allow getting from the URL without inducing a typing error
-  outputMode?: OutputModes | string
   defaultVueRuntimeURL?: string
   defaultVueServerRendererURL?: string
 }
@@ -100,7 +96,6 @@ export class ReplStore implements Store {
   vueVersion?: string
   options?: SFCOptions
   initialShowOutput: boolean
-  initialOutputMode: OutputModes
 
   private defaultVueRuntimeURL: string
   private defaultVueServerRendererURL: string
@@ -109,7 +104,6 @@ export class ReplStore implements Store {
     defaultVueRuntimeURL = `https://unpkg.com/@vue/runtime-dom@${version}/dist/runtime-dom.esm-browser.js`,
     defaultVueServerRendererURL = `https://unpkg.com/@vue/server-renderer@${version}/dist/server-renderer.esm-browser.js`,
     showOutput = false,
-    outputMode = 'preview'
   }: StoreOptions = {}) {
     let files: StoreState['files'] = {}
 
@@ -127,7 +121,6 @@ export class ReplStore implements Store {
     this.defaultVueRuntimeURL = defaultVueRuntimeURL
     this.defaultVueServerRendererURL = defaultVueServerRendererURL
     this.initialShowOutput = showOutput
-    this.initialOutputMode = outputMode as OutputModes
 
     let mainFile = defaultMainFile
     if (!files[mainFile]) {
