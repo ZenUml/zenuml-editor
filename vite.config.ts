@@ -7,8 +7,8 @@ const genStub: Plugin = {
   generateBundle() {
     this.emitFile({
       type: 'asset',
-      fileName: 'ssr-stub.js',
-      source: `module.exports = {}`
+      fileName: 'embed-test.html',
+      source: `<iframe src="dist/embed.html" width="100%" height="100%"></iframe>`
     })
   }
 }
@@ -16,6 +16,11 @@ const genStub: Plugin = {
 export default defineConfig({
   plugins: [vue(), genStub],
   build: {
+    rollupOptions: {
+      input: {
+        app: './embed.html',
+      }
+    },
     minify: true
   }
 })
