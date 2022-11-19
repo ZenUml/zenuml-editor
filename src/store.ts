@@ -1,6 +1,6 @@
 import { version, reactive } from 'vue'
 import * as defaultCompiler from 'vue/compiler-sfc'
-import { utoa, atou, defaultDiagramName } from './utils'
+import { utoa, defaultDiagramName } from './utils'
 import {
   SFCScriptCompileOptions,
   SFCAsyncStyleCompileOptions,
@@ -62,6 +62,7 @@ export interface StoreState {
   vueServerRendererURL: string
   // used to force reset the sandbox
   resetFlip: boolean
+  theme: string
 }
 
 export interface SFCOptions {
@@ -107,16 +108,16 @@ export class ReplStore implements Store {
   }: StoreOptions = {}) {
     let files: StoreState['files'] = {}
 
-    if (serializedState) {
-      const saved = JSON.parse(atou(serializedState))
-      for (const filename in saved) {
-        files[filename] = new File(filename, saved[filename])
-      }
-    } else {
+    // if (serializedState) {
+    //   const saved = JSON.parse(atou(serializedState))
+    //   for (const filename in saved) {
+    //     files[filename] = new File(filename, saved[filename])
+    //   }
+    // } else {
       files = {
         [defaultMainFile]: new File(defaultMainFile, welcomeCode)
       }
-    }
+    // }
 
     this.defaultVueRuntimeURL = defaultVueRuntimeURL
     this.defaultVueServerRendererURL = defaultVueServerRendererURL
@@ -133,7 +134,8 @@ export class ReplStore implements Store {
       errors: [],
       vueRuntimeURL: this.defaultVueRuntimeURL,
       vueServerRendererURL: this.defaultVueServerRendererURL,
-      resetFlip: true
+      resetFlip: true,
+      theme: ''
     })
 
     this.initImportMap()

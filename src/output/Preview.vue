@@ -140,10 +140,11 @@ async function updatePreview() {
   try {
     const mainFile = store.state.mainFile
     const { code } = store.state.activeFile
+    const theme = store.state.theme
 
     // eval code in sandbox
     // console.log(`[@vue/repl] evaluating code in sandbox...`, code)
-    await proxy.eval(code)
+    await proxy.eval(code, theme)
   } catch (e: any) {
     console.error(e)
     // runtimeError.value = (e as Error).message

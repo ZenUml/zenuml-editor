@@ -86,8 +86,8 @@ export class PreviewProxy {
     }
   }
 
-  eval(code: string | string[]) {
-    return this.iframe_command('eval', { code, theme: 'light', style: '', css: '' })
+  eval(code: string | string[], theme: string) {
+    return this.iframe_command('eval', { code, theme, style: '', css: '' })
   }
 
   handle_links() {

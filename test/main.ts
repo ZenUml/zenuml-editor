@@ -8,7 +8,6 @@ const App = {
     const store = new ReplStore({
       serializedState: location.hash.slice(1),
       showOutput: query.has('so'),
-      outputMode: query.get('om') || 'preview',
       defaultVueRuntimeURL: import.meta.env.PROD
         ? undefined
         : `${location.origin}/src/vue-dev-proxy`,
@@ -22,13 +21,13 @@ const App = {
     // setTimeout(() => {
     // store.setFiles(
     //   {
-    //     'index.html': '<h1>yo</h1>',
+    //     'embed.html': '<h1>yo</h1>',
     //     'main.js': 'document.body.innerHTML = "<h1>hello</h1>"',
     //     'foo.js': 'document.body.innerHTML = "<h1>hello</h1>"',
     //     'bar.js': 'document.body.innerHTML = "<h1>hello</h1>"',
     //     'baz.js': 'document.body.innerHTML = "<h1>hello</h1>"'
     //   },
-    //   'index.html'
+    //   'embed.html'
     // )
     // }, 1000);
 
