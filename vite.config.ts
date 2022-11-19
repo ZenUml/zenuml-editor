@@ -7,7 +7,7 @@ const genStub: Plugin = {
   generateBundle() {
     this.emitFile({
       type: 'asset',
-      fileName: 'embed-test.html',
+      fileName: 'embed-container-demo.html',
       source: `<iframe src="dist/embed.html" width="100%" height="100%"></iframe>`
     })
   }
