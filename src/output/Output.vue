@@ -11,29 +11,10 @@ const props = defineProps<{
 }>()
 
 const store = inject('store') as Store
-const modes = computed(() =>
-  props.showCompileOutput
-    ? (['preview', 'js', 'css', 'ssr'] as const)
-    : (['preview'] as const)
-)
-
-const mode = ref<OutputModes>(
-  (modes.value as readonly string[]).includes(store.initialOutputMode)
-    ? store.initialOutputMode as OutputModes
-    : 'preview'
-)
+const mode = ref<OutputModes>('preview')
 </script>
 
 <template>
-  <div class="tab-buttons">
-    <button
-      v-for="m of modes"
-      :class="{ active: mode === m }"
-      @click="mode = m"
-    >
-      <span>{{ m }}</span>
-    </button>
-  </div>
 
   <div class="output-container">
     <Preview :show="mode === 'preview'" :ssr="ssr" />
