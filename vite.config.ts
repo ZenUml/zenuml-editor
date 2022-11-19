@@ -31,6 +31,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         app: './embed.html',
+        index: './index.html'
       }
     },
     minify: true
