@@ -25,7 +25,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "16"
-          cache: pnpm
+          cache: npm
       - name: Install dependencies
         run: npx pnpm install
       - name: Run tests
@@ -64,7 +64,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "16"
-          cache: pnpm
+          cache: npm
       - name: Install dependencies
         run: npx pnpm install
       - name: Build the site for demo page and embed view
