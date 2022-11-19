@@ -27,9 +27,9 @@ jobs:
           node-version: "16"
           cache: npm
       - name: Install dependencies
-        run: npx pnpm install
+        run: npm install
       - name: Run tests
-        run: pnpm run test
+        run: npm run test
 
 #  npm-publish:
 #    runs-on: ubuntu-latest
@@ -42,10 +42,10 @@ jobs:
 #        uses: actions/setup-node@v3
 #        with:
 #          node-version: "16"
-#          cache: pnpm
-#      - run: npx pnpm install
+#          cache: npm
+#      - run: npm install
 #      - name: Build
-#        run: pnpm run build
+#        run: npm run build
 #      - name: Publish
 #        uses: mikeal/merge-release@master
 #        env:
@@ -66,9 +66,9 @@ jobs:
           node-version: "16"
           cache: npm
       - name: Install dependencies
-        run: npx pnpm install
+        run: npm install
       - name: Build the site for demo page and embed view
-        run: pnpm run build
+        run: npm run build
       - name: Upload artifact for pages # upload zipped artifact named 'gh-pages' for actions/deploy-pages@v1
         uses: actions/upload-pages-artifact@v1
         with:
