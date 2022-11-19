@@ -62,6 +62,7 @@ export interface StoreState {
   vueServerRendererURL: string
   // used to force reset the sandbox
   resetFlip: boolean
+  theme: string
 }
 
 export interface SFCOptions {
@@ -133,7 +134,8 @@ export class ReplStore implements Store {
       errors: [],
       vueRuntimeURL: this.defaultVueRuntimeURL,
       vueServerRendererURL: this.defaultVueServerRendererURL,
-      resetFlip: true
+      resetFlip: true,
+      theme: ''
     })
 
     this.initImportMap()

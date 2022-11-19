@@ -25,6 +25,7 @@ iframe.addEventListener('load', () => {
 - `replace` - Replace the current diagram with the given code
 - `get` - Get the current diagram code
 - `autoReport` - Enable or disable auto reporting
+- `theme` - Set the theme
 
 The editor starts wth a default diagram code snippet. You can replace it with your own code by sending a `replace` message to the editor.
 
@@ -69,5 +70,21 @@ const iframe = document.querySelector('iframe');
 iframe.contentWindow.postMessage({
   method: 'autoReport',
   enabled: true
+}, '*');
+```
+
+You can set the theme by sending a `theme` message to the editor. Default is empty name, you can also set it to `theme-black-white`, `theme-blue` and `theme-star-uml`.
+
+```javascript
+window.addEventListener('message', (event) => {
+  if (event.data.method === 'theme') {
+    console.log(event.data.result); // ok
+  }
+});
+
+const iframe = document.querySelector('iframe');
+iframe.contentWindow.postMessage({
+  method: 'theme',
+  theme: 'theme-star-uml'
 }, '*');
 ```

@@ -67,6 +67,15 @@ async function handle_message(ev: any) {
       sendBack(sourceWindow, message.method, 'error: missing field: value')
     }
   }
+
+  if (message.method === 'theme') {
+    if (message.hasOwnProperty('theme')) {
+      store.state.theme = message.theme
+      sendBack(sourceWindow, message.method, 'ok')
+    } else {
+      sendBack(sourceWindow, message.method, 'error: missing field: theme')
+    }
+  }
 }
 
 /**
