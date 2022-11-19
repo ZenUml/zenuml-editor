@@ -13,12 +13,25 @@ const genStub: Plugin = {
   }
 }
 
+const genCNAME: Plugin = {
+  name: 'gen-stub',
+  apply: 'build',
+  generateBundle() {
+    this.emitFile({
+      type: 'asset',
+      fileName: 'CNAME.txt',
+      source: `embed-editor.zenuml.com`
+    })
+  }
+}
+
 export default defineConfig({
-  plugins: [vue(), genStub],
+  plugins: [vue(), genStub, genCNAME],
   build: {
     rollupOptions: {
       input: {
         app: './embed.html',
+        index: './index.html'
       }
     },
     minify: true
