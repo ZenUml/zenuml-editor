@@ -7,6 +7,7 @@
   ],
   "scripts": {
     "dev": "vite",
+    "test": "echo \"Warning: test to be added\" && exit 0",
     "build": "vite build",
     "build-types": "vue-tsc -p tsconfig.build.json && api-extractor run -c api-extractor.json && rimraf dist/src",
     "prepublishOnly": "npm run build && npm run build-types"
