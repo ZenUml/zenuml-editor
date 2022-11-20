@@ -1,12 +1,26 @@
 The code editor for Zenuml
 ---
 
+# Quick test
+1. Open https://embed-editor.zenuml.com
+2. Open the console (F12 on Chrome)
+3. Paste the following code in the console and press enter
+
+```javascript
+// Post the code to the editor and render it
+// If the editor is in an iFrame, you need to post to `iframe.contentWindow`  
+window.postMessage({
+    method: 'replace',
+    code: 'Participant.Message'
+  }, '*');
+```
+
 # How to use
 ## As an iFrame
 You can embed this editor in an iFrame then postMessage to it to load a diagram.
 
 ```html
-<iframe src="https://xxx" width="100%" height="100%"></iframe>
+<iframe src="https://embed-editor.zenuml.com" width="100%" height="100%"></iframe>
 ```
 
 Then postMessage to it to load a diagram.
@@ -16,7 +30,7 @@ const iframe = document.querySelector('iframe');
 iframe.addEventListener('load', () => {
   iframe.contentWindow.postMessage({
     method: 'replace',
-    code: 'ZEN:...'
+    code: 'Participant.Message'
   }, '*');
 });
 ```
@@ -33,7 +47,7 @@ The editor starts wth a default diagram code snippet. You can replace it with yo
 const iframe = document.querySelector('iframe');
 iframe.contentWindow.postMessage({
   method: 'replace',
-  code: 'ZEN:...'
+  code: 'Participant.Message'
 }, '*');
 ```
 
