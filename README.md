@@ -20,7 +20,7 @@ window.postMessage({
 You can embed this editor in an iFrame then postMessage to it to load a diagram.
 
 ```html
-<iframe src="https://embed-editor.zenuml.com" width="100%" height="100%"></iframe>
+<iframe src="https://embed-editor.zenuml.com/embed.html" width="100%" height="100%"></iframe>
 ```
 
 Then postMessage to it to load a diagram.
