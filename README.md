@@ -3,7 +3,7 @@ The code editor for Zenuml
 
 # Quick test
 1. Open https://embed-editor.zenuml.com/embed.html
-2. Open the console (F12 on Chrome)
+2. Open the console (`F12` on Chrome)
 3. Paste the following code in the console and press enter
 
 ```javascript
