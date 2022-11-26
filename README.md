@@ -1,4 +1,4 @@
-The code editor for Zenuml
+The code editor for ZenUML
 ---
 
 # Quick test

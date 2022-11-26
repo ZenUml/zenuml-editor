@@ -1,6 +1,7 @@
-import { createApp, h, watchEffect } from 'vue'
-import { Repl, ReplStore } from '../src'
-;(window as any).process = { env: {} }
+import {createApp, h} from 'vue'
+import {Repl, ReplStore} from '../src'
+
+(window as any).process = {env: {}}
 
 const App = {
   setup() {
@@ -15,23 +16,6 @@ const App = {
         ? undefined
         : `${location.origin}/src/vue-server-renderer-dev-proxy`
     })
-
-    watchEffect(() => history.replaceState({}, '', store.serialize()))
-
-    // setTimeout(() => {
-    // store.setFiles(
-    //   {
-    //     'embed.html': '<h1>yo</h1>',
-    //     'main.js': 'document.body.innerHTML = "<h1>hello</h1>"',
-    //     'foo.js': 'document.body.innerHTML = "<h1>hello</h1>"',
-    //     'bar.js': 'document.body.innerHTML = "<h1>hello</h1>"',
-    //     'baz.js': 'document.body.innerHTML = "<h1>hello</h1>"'
-    //   },
-    //   'embed.html'
-    // )
-    // }, 1000);
-
-    // store.setVueVersion('3.2.8')
 
     return () =>
       h(Repl, {

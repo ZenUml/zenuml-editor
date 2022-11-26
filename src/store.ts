@@ -1,6 +1,6 @@
-import { version, reactive } from 'vue'
+import {version, reactive} from 'vue'
 import * as defaultCompiler from 'vue/compiler-sfc'
-import { utoa, defaultDiagramName } from './utils'
+import {defaultDiagramName} from './utils'
 import {
   SFCScriptCompileOptions,
   SFCAsyncStyleCompileOptions,
@@ -80,7 +80,6 @@ export interface Store {
   setActive: (filename: string) => void
   addFile: (filename: string | File) => void
   deleteFile: (filename: string) => void
-  getImportMap: () => any
   initialShowOutput: boolean
 }
 
@@ -100,12 +99,12 @@ export class ReplStore implements Store {
 
   private defaultVueRuntimeURL: string
   private defaultVueServerRendererURL: string
+
   constructor({
-    serializedState = '',
-    defaultVueRuntimeURL = `https://unpkg.com/@vue/runtime-dom@${version}/dist/runtime-dom.esm-browser.js`,
-    defaultVueServerRendererURL = `https://unpkg.com/@vue/server-renderer@${version}/dist/server-renderer.esm-browser.js`,
-    showOutput = false,
-  }: StoreOptions = {}) {
+                defaultVueRuntimeURL = `https://unpkg.com/@vue/runtime-dom@${version}/dist/runtime-dom.esm-browser.js`,
+                defaultVueServerRendererURL = `https://unpkg.com/@vue/server-renderer@${version}/dist/server-renderer.esm-browser.js`,
+                showOutput = false,
+              }: StoreOptions = {}) {
     let files: StoreState['files'] = {}
 
     // if (serializedState) {
@@ -114,9 +113,9 @@ export class ReplStore implements Store {
     //     files[filename] = new File(filename, saved[filename])
     //   }
     // } else {
-      files = {
-        [defaultMainFile]: new File(defaultMainFile, welcomeCode)
-      }
+    files = {
+      [defaultMainFile]: new File(defaultMainFile, welcomeCode)
+    }
     // }
 
     this.defaultVueRuntimeURL = defaultVueRuntimeURL
@@ -137,11 +136,10 @@ export class ReplStore implements Store {
       resetFlip: true,
       theme: ''
     })
-
-    this.initImportMap()
   }
 
-  init() { }
+  init() {
+  }
 
   setActive(filename: string) {
     this.state.activeFile = this.state.files[filename]
@@ -163,58 +161,6 @@ export class ReplStore implements Store {
       }
       delete this.state.files[filename]
     }
-  }
-
-  serialize() {
-    return '#' + utoa(JSON.stringify(this.getFiles()))
-  }
-
-  getFiles() {
-    const exported: Record<string, string> = {}
-    for (const filename in this.state.files) {
-      exported[filename] = this.state.files[filename].code
-    }
-    return exported
-  }
-  private initImportMap() {
-    // const map = this.state.files['import-map.json']
-    // if (!map) {
-    //   this.state.files['import-map.json'] = new File(
-    //     'import-map.json',
-    //     JSON.stringify(
-    //       {
-    //         imports: {
-    //           vue: this.defaultVueRuntimeURL
-    //         }
-    //       },
-    //       null,
-    //       2
-    //     )
-    //   )
-    // } else {
-    //   try {
-    //     const json = JSON.parse(map.code)
-    //     if (!json.imports.vue) {
-    //       json.imports.vue = this.defaultVueRuntimeURL
-    //       map.code = JSON.stringify(json, null, 2)
-    //     }
-    //     if (!json.imports['vue/server-renderer']) {
-    //       json.imports['vue/server-renderer'] = this.defaultVueServerRendererURL
-    //       map.code = JSON.stringify(json, null, 2)
-    //     }
-    //   } catch (e) {}
-    // }
-  }
-
-  getImportMap() {
-  //   try {
-  //     return JSON.parse(this.state.files['import-map.json'].code)
-  //   } catch (e) {
-  //     this.state.errors = [
-  //       `Syntax error in import-map.json: ${(e as Error).message}`
-  //     ]
-  //     return {}
-  //   }
   }
 
 }
