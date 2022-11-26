@@ -9,32 +9,7 @@ import {
 
 const defaultMainFile = defaultDiagramName()
 
-const welcomeCode = `
-// An example for a RESTful endpoint<br>
-// Go to the "Cheat sheet" tab or https://docs.zenuml.com
-// to find all syntax<br>
-// \`POST /v1/book/{id}/borrow\`
-BookLibService.Borrow(id) {
-  User = Session.GetUser()
-  if(User.isActive) {
-    try {
-      BookRepository.Update(id, onLoan, User)
-      receipt = new Receipt(id, dueDate)
-    } catch (BookNotFoundException) {
-      ErrorService.onException(BookNotFoundException)
-    } finally {
-      Connection.close()
-    }
-  }
-  return receipt
-}
-
-result = A.message {
-}
-a = new A()
-//Note
-A.message()
-`.trim()
+const welcomeCode = ''
 
 export class File {
   filename: string
