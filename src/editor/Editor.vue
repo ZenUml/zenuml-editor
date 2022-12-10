@@ -76,6 +76,17 @@ async function handle_message(ev: any) {
       sendBack(sourceWindow, message.method, 'error: missing field: theme')
     }
   }
+
+  if (message.method === 'png') {
+    const iframe = document.querySelector('iframe')
+    if (iframe) {
+      iframe.contentWindow?.postMessage({action: 'get_png'}, '*')
+    }
+  }
+
+  if (parent && message.action && message.action === 'cmd_png') {
+    sendBack(parent, 'png', message.png)
+  }
 }
 
 /**
