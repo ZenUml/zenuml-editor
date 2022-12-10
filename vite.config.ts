@@ -8,7 +8,7 @@ const genStub: Plugin = {
     this.emitFile({
       type: 'asset',
       fileName: 'embed-container-demo.html',
-      source: `<iframe src="dist/embed.html" width="100%" height="100%"></iframe>`
+      source: `<iframe src="embed.html" width="100%" height="100%"></iframe>`
     })
   }
 }

@@ -40,6 +40,7 @@ iframe.addEventListener('load', () => {
 - `get` - Get the current diagram code
 - `autoReport` - Enable or disable auto reporting
 - `theme` - Set the theme
+- `png` - Get the current diagram as a PNG image
 
 The editor starts wth a default diagram code snippet. You can replace it with your own code by sending a `replace` message to the editor.
 
@@ -100,5 +101,20 @@ const iframe = document.querySelector('iframe');
 iframe.contentWindow.postMessage({
   method: 'theme',
   theme: 'theme-star-uml'
+}, '*');
+```
+
+You can get the current diagram as a PNG image by sending a `png` message to the editor. The editor will reply with a `png` method.
+
+```javascript
+window.addEventListener('message', (event) => {
+  if (event.data.method === 'png') {
+    console.log(event.data.result); // data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...
+  }
+});
+
+const iframe = document.querySelector('iframe');
+iframe.contentWindow.postMessage({
+  method: 'png'
 }, '*');
 ```
