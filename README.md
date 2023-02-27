@@ -118,3 +118,13 @@ iframe.contentWindow.postMessage({
   method: 'png'
 }, '*');
 ```
+
+If any error happens, the editor will reply with an `error` method.
+
+```javascript
+window.addEventListener('message', (event) => {
+  if (event.data.method === 'error') {
+    console.log(JSON.parse(event.data.result)); // Error: ...
+  }
+});
+```

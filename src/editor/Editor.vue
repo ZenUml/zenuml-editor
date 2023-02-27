@@ -87,6 +87,11 @@ async function handle_message(ev: any) {
   if (parent && message.action && message.action === 'cmd_png') {
     sendBack(parent, 'png', message.png)
   }
+  
+  if (parent && message.action && message.action === 'cmd_error') {
+    sendBack(parent, 'error', JSON.stringify({message:message.message, stack:message.stack}))
+  }
+
 }
 
 /**
